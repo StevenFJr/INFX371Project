@@ -37,10 +37,10 @@
 <script type="text/javascript">    
         <?php
         if (isset($_POST['submit'])){
-            $result = getinfo($_POST['symbol']);
+            $result = getinfosymbol($_POST['symbol']);
             // echo('document.getElementById("infoArea").innerHTML=("<div> <p> Name: '. $result->name .' Price: '. $result->quote->USD->price .' </p> </div>");');
         } else if (isset($_POST['submit2'])){
-            $result = getinfo($_POST['name']);
+            $result = getinfoname($_POST['name']);
             // echo('document.getElementById("infoArea").innerHTML=("<div> <p> Name: '. $result->name .' Price: '. $result->quote->USD->price .' </p> </div>");');
 
         }else{
