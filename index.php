@@ -27,8 +27,28 @@
         </form>
     </div>
 
-    <div id="infoArea">
-    </div>
+    <table id="resultdisplay">
+        <tr>
+            <th>Name</th>
+            <td id="NameResult"></td>
+        </tr>
+        <tr>
+            <th>Price</th>
+            <td id="PriceResult"></td>
+        </tr>
+        <tr>
+            <th>Market Cap</th>
+            <td id="MarketCapResult"></td>
+        </tr>
+        <tr>
+            <th>Volume 24hr</th>
+            <td id="VolumeResult"></td>
+        </tr>
+            <th>Change 24hr</th>
+            <td id="Change24Result"></td>
+        </tr>
+
+    </table>
     
 
     

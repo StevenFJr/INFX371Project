@@ -24,8 +24,8 @@ Object.prototype.getByIndex = function(index) {
 //     })  
 // }
 
-function print(stringtoprint){
-    let target = document.getElementById("infoArea");
+function print(stringtoprint,location){
+    let target = document.getElementById(location);
     target.innerText= target.innerText+" "+stringtoprint+"\n";
 }
 
@@ -33,8 +33,11 @@ function decode(apiout){
     if(apiout != null){
         var x1 = JSON.parse(apiout);
         var x2=x1.data.getByIndex(0);
-        print("\nName: "+x2.name);
-        print("Price: "+x2.quote.USD.price);
+        print(x2.name,"NameResult");
+        print(x2.quote.USD.price, "PriceResult");
+        print(x2.quote.USD.market_cap, "MarketCapResult");
+        print(x2.quote.USD.volume_24h, "VolumeResult");
+        print(x2.quote.USD.percent_change_24h, "Change24Result");
         return x2;
     }
 }
