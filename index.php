@@ -93,6 +93,7 @@
         <?php $que=query(); ?>
         let queryres = "<?=$que[0][0]." ".$que[0][1]." ".$que[1][0]." ".$que[1][1];?>"
         console.log(queryres);
+        <?php insertmultiple()?>
     }
     }catch(error){
         console.log(error);

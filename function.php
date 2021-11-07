@@ -79,7 +79,7 @@
         $parameters = [
         'convert' => 'USD',
         'start' => 1,
-        'limit' => 10
+        'limit' => 1000
         ];
         
         $headers = [
@@ -100,9 +100,56 @@
         $response = curl_exec($curl); // Send the request, save the response       
         curl_close($curl); // Close request
 
+
         return($response);
     }
 
+    function insert(){
+        $servername = "localhost";
+        $username = "user";
+        $password = "12345";
+        $dbname = "bigleaf";
+        
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $conn->prepare("INSERT INTO listingslatest (Rank, Image, Name, Symbol, Volume24h, Change7d, Change24h, Change1h, MarketCap) VALUES (?,?,?,?,?,?,?,?,?)");
+            $stmt->execute([3,"img3","Test3","TST3",3,3,3,3,3]);
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        $conn = null;
+    }
+    
+    function insertmultiple(){
+        $servername = "localhost";
+        $username = "user";
+        $password = "12345";
+        $dbname = "bigleaf";
+        $data = [
+            [3,"img3","Test3","TST3",3,3,3,3,3],
+            [4,"img4","Test4","TST4",4,4,4,4,4]
+        ];
 
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $conn->prepare("INSERT INTO listingslatest (Rank, Image, Name, Symbol, Volume24h, Change7d, Change24h, Change1h, MarketCap) VALUES (?,?,?,?,?,?,?,?,?)");
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        try {
+            $conn->beginTransaction();
+            foreach ($data as $row)
+            {
+                $stmt->execute($row);
+            }
+            $conn->commit();
+        }catch (Exception $e){
+            $conn->rollback();
+            throw $e;
+        }
+        $conn = null;
+    }
     
 ?>
