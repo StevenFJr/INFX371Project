@@ -73,27 +73,29 @@
 <script type="text/javascript">    
     <?php
         if (isset($_POST['submit'])){
-            $result = getinfosymbol($_POST['symbol']);
+            $result = getinfo($_POST['symbol'],"symbol");
             $topten = null;
         } else if (isset($_POST['submit2'])){
-            $result = getinfoname($_POST['name']);
+            $result = getinfo($_POST['name'],"slug");
             $topten = null;
         }else{
             $result = '"test"';
             $topten = gettopten();
             $topten = json_encode(substr($topten,158,strlen($topten)-157));
+            // $topten= json_encode($topten);
         }
     ?>
     try{
+        console.log(<?=$topten?>);
         if(<?=$result?> != "test"){
         decode(<?=$result?>);
     }else{
         console.log("Please enter a value in one of the empty fields.");
-        decode();
-        <?php $que=query(); ?>
-        let queryres = "<?=$que[0][0]." ".$que[0][1]." ".$que[1][0]." ".$que[1][1];?>"
-        console.log(queryres);
-        <?php insertmultiple()?>
+        // decode();
+        // <php $que=query(); ?>
+        // let queryres = "<=$que[0][0]." ".$que[0][1]." ".$que[1][0]." ".$que[1][1];?>"
+        // console.log(queryres);
+        // <php insertmultiple()?>
     }
     }catch(error){
         console.log(error);
