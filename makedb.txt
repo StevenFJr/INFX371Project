@@ -1,0 +1,12 @@
+CREATE TABLE `listingslatest` (
+  `id` int,
+  `symbol` text,
+  `slug` text,
+  `volume_24h` float,
+  `percent_change_1h` float,
+  `percent_change_24h` float,
+  `percent_change_7d` float,
+  `market_cap` float,
+  `price` double,
+  PRIMARY KEY (`id`)
+);
