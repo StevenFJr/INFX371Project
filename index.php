@@ -27,6 +27,7 @@
             }
         }
     }
+	topTenPrint();
         // gettopthousand();
         // print_r(query("slug","ethereum"));
     ?>
