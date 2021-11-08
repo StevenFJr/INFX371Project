@@ -8,7 +8,7 @@
         try {
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $stmt = $conn->prepare("INSERT INTO listingslatest (id, symbol, slug, volume24h, percent_change_1h, percent_change_24h, percent_change_7d, market_cap, price) VALUES (?,?,?,?,?,?,?,?,?)");
+            $stmt = $conn->prepare("INSERT INTO listingslatest (id, symbol, slug, volume_24h, percent_change_1h, percent_change_24h, percent_change_7d, market_cap, price) VALUES (?,?,?,?,?,?,?,?,?)");
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -77,7 +77,7 @@
             if(empty($data)){
                 throw new Exception();
             }
-            prettyprint($data);
+            printCoin($data);
             return($data);
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -85,7 +85,7 @@
         $conn = null;
     }
 
-    function prettyprint($array){
+    function printCoin($array){
         echo("<img src='https://s2.coinmarketcap.com/static/img/coins/64x64/".$array[0]["id"].".png' alt='Coin Image'>");
         echo nl2br("\n");
         echo("ID: ".$array[0]["id"]);
@@ -100,11 +100,59 @@
         echo nl2br("\n");
         echo("Percent Change 7d: ".$array[0]["percent_change_7d"]);
         echo nl2br("\n");
-        echo("Volume 24h: ".$array[0]["volume24h"]);
+        echo("Volume 24h: ".$array[0]["volume_24h"]);
         echo nl2br("\n");
         echo("Market Cap: ".$array[0]["market_cap"]);
         echo nl2br("\n");
         echo("Price: ".$array[0]["price"]);
         
+    }
+	
+	    function topTenPrint(){
+        $servername = "localhost";
+        $username = "user";
+        $password = "12345";
+        $dbname = "bigleaf";
+        
+        try{
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $conn->prepare("SELECT * FROM listingslatest ORDER BY market_cap DESC LIMIT 10");
+            $stmt->execute();
+        
+            // set the resulting array to associative
+            $data = $stmt->fetchAll();
+            if(empty($data)){
+                throw new Exception();
+            }
+			for($i=0;$i<=9;$i++){
+				echo nl2br("\n");
+				echo nl2br("\n");
+				echo("<img src='https://s2.coinmarketcap.com/static/img/coins/32x32/".$data[$i]["id"].".png' alt='Coin Image'>");
+				echo("\r\n");
+				echo("ID: ".$data[$i]["id"]);
+				echo("\r\n");
+				echo("Symbol: ".$data[$i]["symbol"]);
+				echo("\r\n");
+				echo("Name: ".$data[$i]["slug"]);
+				echo("\r\n");
+				echo("Percent Change 1h: ".$data[$i]["percent_change_1h"]);
+				echo("\r\n");
+				echo("Percent Change 24h: ".$data[$i]["percent_change_24h"]);
+				echo("\r\n");
+				echo("Percent Change 7d: ".$data[$i]["percent_change_7d"]);
+				echo("\r\n");
+				echo("Volume 24h: ".$data[$i]["volume_24h"]);
+				echo("\r\n");
+				echo("Market Cap: ".$data[$i]["market_cap"]);
+				echo("\r\n");
+				echo("Price: ".$data[$i]["price"]);
+				echo nl2br("\n"."________________________________________________________________________________________________________________________________________________________________________________________________");
+			}
+            return($data);
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        $conn = null;
     }
 ?>
