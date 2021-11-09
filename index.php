@@ -23,10 +23,16 @@
             try{(query("symbol",$_POST['inText']));
                 // echo("Found Symbol");
             }catch(Exception $e){
-                echo("Coin Not Found");
+                try{(APICall("slug",strtolower($_POST['inText'])));
+                }catch(Exception $e){
+                    try{(APICall("symbol",$_POST['inText']));
+                    }catch(Exception $e){
+                        echo("Coin Not Found");
+                }
             }
         }
     }
+}
     gettopthousand();	
     topTenPrint();
     ?>

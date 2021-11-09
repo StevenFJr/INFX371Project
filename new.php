@@ -1,4 +1,9 @@
 <?php
+    if (!function_exists('str_contains')) {
+        function str_contains($haystack, $needle) {
+            return $needle !== '' && mb_strpos($haystack, $needle) !== false;
+        }
+    }
     function insertmultiple($data){
         $servername = "localhost";
         $username = "user";
@@ -64,7 +69,56 @@
         }
     }
 
-
+    function APICall($parameter,$search){
+        $url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
+        $parameters = [
+        'convert' => 'USD',
+        $parameter => $search,
+        ];
+        
+        $headers = [
+        'Accepts: application/json',
+        'X-CMC_PRO_API_KEY: 1df96060-e4e1-4480-b7fa-43110a83a489'
+        ];
+        $qs = http_build_query($parameters); // query string encode the parameters
+        $request = "{$url}?{$qs}";
+    
+        $curl = curl_init(); // Get cURL resource
+        // Set cURL options
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => $request,            // set the request URL
+        CURLOPT_HTTPHEADER => $headers,     // set the headers 
+        CURLOPT_RETURNTRANSFER => 1         // ask for raw response instead of bool
+        ));
+        $response = curl_exec($curl); // Send the request, save the response       
+        curl_close($curl); // Close request
+        
+        if(str_contains($response,"Invalid") || empty($response)){
+            throw new Exception();
+        }else{
+            $array=(json_decode($response,true));
+            echo("<img src='https://s2.coinmarketcap.com/static/img/coins/64x64/".$array["data"][$search]["id"].".png' alt='Coin Image'>");
+            echo nl2br("\n");
+            // echo("ID: ".$array["data"][$search]["id"]);
+            // echo nl2br("\n");
+            echo("Symbol: ".$array["data"][$search]["symbol"]);
+            echo nl2br("\n");
+            echo("Name: ".$array["data"][$search]["name"]);
+            echo nl2br("\n");
+            echo("Price: ".$array["data"][$search]["quote"]["USD"]["price"]);    
+            echo nl2br("\n");
+            echo("Percent Change 1h: ".$array["data"][$search]["quote"]["USD"]["percent_change_1h"]);
+            echo nl2br("\n");
+            echo("Percent Change 24h: ".$array["data"][$search]["quote"]["USD"]["percent_change_24h"]);
+            echo nl2br("\n");
+            echo("Percent Change 7d: ".$array["data"][$search]["quote"]["USD"]["percent_change_7d"]);
+            echo nl2br("\n");
+            echo("Volume 24h: ".$array["data"][$search]["quote"]["USD"]["volume_24h"]);
+            echo nl2br("\n");
+            echo("Market Cap: ".$array["data"][$search]["quote"]["USD"]["market_cap"]);
+                
+        }
+    }
     function query($parameter, $search){
         $servername = "localhost";
         $username = "user";
@@ -93,11 +147,14 @@
     function printCoin($array){
         echo("<img src='https://s2.coinmarketcap.com/static/img/coins/64x64/".$array[0]["id"].".png' alt='Coin Image'>");
         echo nl2br("\n");
-        echo("ID: ".$array[0]["id"]);
-        echo nl2br("\n");
+        // echo("ID: ".$array[0]["id"]);
+        
+        
         echo("Symbol: ".$array[0]["symbol"]);
         echo nl2br("\n");
         echo("Name: ".$array[0]["name"]);
+        echo nl2br("\n");
+        echo("Price: ".$array[0]["price"]);
         echo nl2br("\n");
         echo("Percent Change 1h: ".$array[0]["percent_change_1h"]);
         echo nl2br("\n");
@@ -109,7 +166,7 @@
         echo nl2br("\n");
         echo("Market Cap: ".$array[0]["market_cap"]);
         echo nl2br("\n");
-        echo("Price: ".$array[0]["price"]);
+        
         
     }
 	
@@ -134,13 +191,14 @@
 				echo nl2br("\n");
 				echo nl2br("\n");
 				echo("<img src='https://s2.coinmarketcap.com/static/img/coins/32x32/".$data[$i]["id"].".png' alt='Coin Image'>");
-				echo("\r\n");
-				echo("<h3 style='display:inline'>ID: </h3><p style='display:inline'>".$data[$i]["id"]."</p>");
+				// echo("<h3 style='display:inline'>ID: </h3><p style='display:inline'>".$data[$i]["id"]."</p>");
 				echo("\r\n");
 				echo("<h3 style='display:inline'>Symbol: </h3><p style='display:inline'>".$data[$i]["symbol"]."</p>");
 				echo("\r\n");
 				echo("<h3 style='display:inline'>Name: </h3><p style='display:inline'>".$data[$i]["name"]."</p>");
 				echo("\r\n");
+                echo("<h3 style='display:inline'>Price: </h3><p style='display:inline'>".$data[$i]["price"]."</p>");
+                echo("\r\n");
 				echo("<h3 style='display:inline'>Percent Change 1h: </h3><p style='display:inline'>".$data[$i]["percent_change_1h"]."</p>");
 				echo("\r\n");
 				echo("<h3 style='display:inline'>Percent Change 24h: </h3><p style='display:inline'>".$data[$i]["percent_change_24h"]."</p>");
@@ -151,7 +209,6 @@
 				echo("\r\n");
 				echo("<h3 style='display:inline'>Market Cap: </h3><p style='display:inline'>".$data[$i]["market_cap"]."</p>");
 				echo("\r\n");
-				echo("<h3 style='display:inline'>Price: </h3><p style='display:inline'>".$data[$i]["price"]."</p>");
 				echo nl2br("\n"."<hr>");
 			}
             $conn = null;
