@@ -97,7 +97,7 @@
         echo nl2br("\n");
         echo("Symbol: ".$array[0]["symbol"]);
         echo nl2br("\n");
-        echo("Name: ".$array[0]["slug"]);
+        echo("Name: ".$array[0]["name"]);
         echo nl2br("\n");
         echo("Percent Change 1h: ".$array[0]["percent_change_1h"]);
         echo nl2br("\n");

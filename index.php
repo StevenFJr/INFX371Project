@@ -17,8 +17,8 @@
     </form>
     <?php 
     if (isset($_POST['submit'])){
-        try{(query("slug",$_POST['inText']));
-            // echo("Found Slug");
+        try{(query("name",$_POST['inText']));
+            // echo("Found Name");
         }catch(Exception $e){
             try{(query("symbol",$_POST['inText']));
                 // echo("Found Symbol");
