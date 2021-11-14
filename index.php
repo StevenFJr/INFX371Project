@@ -16,6 +16,7 @@
         <button type=sumbit name=submit id='Submit'> Submit</button>
     </form>
     <?php 
+    gettopthousand();
     if (isset($_POST['submit'])){
         try{(query("name",$_POST['inText']));
             // echo("Found Name");
@@ -32,8 +33,7 @@
             }
         }
     }
-}
-    gettopthousand();	
+}	
     topTenPrint();
     ?>
 
