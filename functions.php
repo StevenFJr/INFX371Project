@@ -258,4 +258,147 @@
             return false;
         }
     }
+
+    function TopQuery(){
+        $servername = "localhost";
+        $username = "user";
+        $password = "12345";
+        $dbname = "bigleaf";
+        
+        try{
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $conn->prepare("SELECT * FROM listingslatest ORDER BY market_cap DESC LIMIT 1");
+            $stmt->execute();
+        
+            // set the resulting array to associative
+            $data = $stmt->fetchAll();
+            if(empty($data)){
+                throw new Exception();
+            }
+            return($data);
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        $conn = null;
+    }
+
+    function calc($MrkW,$VolW,$C1W,$C24W,$C7W,$array){
+        $topcoin=TopQuery();
+        $topMrk=$topcoin[0]["market_cap"];
+        $topVol=$topcoin[0]["volume_24h"];
+        $topC1=$topcoin[0]["percent_change_1h"];
+        $topC24=$topcoin[0]["percent_change_24h"];
+        $topC7=$topcoin[0]["percent_change_7d"];
+
+        $total = $MrkW+$VolW+$C1W+$C24W+$C7W;
+        $Mrk=$array[0]["market_cap"];
+        $Vol=$array[0]["volume_24h"];
+        $C1=$array[0]["percent_change_1h"];
+        $C24=$array[0]["percent_change_24h"];
+        $C7=$array[0]["percent_change_7d"];
+
+
+        $MrkW=$MrkW/$total;
+        $VolW=$VolW/$total;
+        $C1W=$C1W/$total;
+        $C24W=$C24W/$total;
+        $C7W=$C7W/$total;
+    
+        
+        if(($topC1>0 && $C1>0)){ //both positive test
+            if($C1 > $topC1){
+                $C1Res = (1 * $C1W) * 100;
+                echo ("C1: ".$C1Res);
+                echo nl2br("\n");
+            }else{
+                $C1Res = (($C1/$topC1) * $C1W) * 100;
+                echo ("C1: ".$C1Res);
+                echo nl2br("\n");
+            }
+        }else if($topC1<0 && $C1<0){ //both negative test
+            if($C1 < $topC1){
+                $C1Res = (0 * $C1W) * 100;
+                echo ("C1: ".$C1Res);
+                echo nl2br("\n");
+            }else{
+                $C1Res = (($C1/$topC1) * $C1W) * 100;
+                echo ("C1: ".$C1Res);
+                echo nl2br("\n");
+        
+        }
+        }else if($topC1<0){ //if top coin is negative and comparing coin isnt
+            $C1Res = (1 * $C1W) * 100;
+            echo ("C1: ".$C1Res);
+            echo nl2br("\n");
+        } else{ // if comparing coin is negative and top coin isnt
+            $C1Res = 0;
+            echo ("C1: ".$C1Res);
+            echo nl2br("\n");
+        }
+
+        if($topC24>0 && $C24>0){
+            if($C24 > $topC24){
+                $C24Res = (1 * $C24W) * 100;
+                echo ("C24: ".$C24Res);
+                echo nl2br("\n");
+            }else{
+                $C24Res = (($C24/$topC24) * $C24W) * 100;
+                echo ("C24: ".$C24Res);
+                echo nl2br("\n");
+            }
+        }else if($topC24<0 && $C24<0){
+            if($C24 < $topC24){
+                $C24Res = (0 * $C24W) * 100;
+                echo ("C24: ".$C24Res);
+                echo nl2br("\n");
+            }else{
+                $C24Res = (($C24/$topC24) * $C24W) * 100;
+                echo ("C24: ".$C24Res);
+                echo nl2br("\n");
+            }
+        }else if($topC24<0){
+            $C24Res = (1 * $C24W) * 100;
+            echo ("C24: ".$C24Res);
+            echo nl2br("\n");
+        } else{
+            $C24Res = 0;
+            echo ("C24: ".$C24Res);
+            echo nl2br("\n");
+        }
+
+        if($topC7>0 && $C7>0){
+            if($C7 > $topC7){
+                $C7Res = (1 * $C7W) * 100;
+                echo ("C7: ".$C7Res);
+                echo nl2br("\n");
+            }else{
+                $C7Res = (($C7/$topC7) * $C7W) * 100;
+                echo ("C7: ".$C7Res);
+                echo nl2br("\n");
+            }
+        }else if($topC7<0 && $C7<0){
+            if($C7 < $topC7){
+                $C7Res = (0 * $C7W) * 100;
+                echo ("C7: ".$C7Res);
+                echo nl2br("\n");
+            }else{
+                $C7Res = (($C7/$topC7) * $C7W) * 100;
+                echo ("C7: ".$C7Res);
+                echo nl2br("\n");
+            }
+        }else if($topC7<0){
+            $C7Res = (1 * $C7W) * 100;
+            echo ("C7: ".$C7Res);
+            echo nl2br("\n");
+        } else{
+            $C7Res = 0;
+            echo ("C7: ".$C7Res);
+            echo nl2br("\n");
+        }
+
+        echo($C1Res+$C24Res+$C7Res);
+        echo nl2br("\n");
+        echo($MrkW*100+$VolW*100+$C1W*100+$C24W*100+$C7W*100);
+    }
 ?>
