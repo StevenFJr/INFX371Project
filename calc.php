@@ -52,13 +52,14 @@
                 <td><input type="num" min="0" max="100" id="Cng7Output" value=50 oninput="Cng7Sld.value = this.value"></td>
             </tr>
         </table>
+        
+        <button type="sumbit" name="calc">Calculate</button>
+        <button><a href="index.php">New Search</a></button>
         <?php if(isset($_POST['MrkSld'])){
             calc($_POST['MrkSld'],$_POST['VolSld'],$_POST['Cng1Sld'],$_POST['Cng24Sld'],$_POST['Cng7Sld'],$coin);
         }; 
             
         ?>
-        <button type="sumbit" name="calc">Calculate</button>
-        <button><a href="index.php">New Search</a></button>
     </form>
     </table>	
     
