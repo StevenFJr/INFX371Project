@@ -19,7 +19,7 @@
             <tr>
             <td></td>
             <td></td>
-            <th>Importance</th>
+            <th>Weights</th>
             </tr>
             <tr>
                 <th>Market Cap</th>
