@@ -4,6 +4,39 @@
             return $needle !== '' && mb_strpos($haystack, $needle) !== false;
         }
     }
+    function savequery($type,$input){
+        $servername = "localhost";
+        $username = "user";
+        $password = "12345";
+        $dbname = "bigleaf";
+        date_default_timezone_set("EST");
+        $timestamp=date_timestamp_get(date_create());
+        $data=array($timestamp,$input);
+
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            if($type == "symbol"){
+                $stmt = $conn->prepare("INSERT INTO searches (timestamp, symbol) VALUES (?,?)");
+            } else if($type == "name"){
+                $stmt = $conn->prepare("INSERT INTO searches (timestamp, name) VALUES (?,?)");
+            }else{
+                $stmt = $conn->prepare("INSERT INTO searches (timestamp, failedsearch) VALUES (?,?)");
+            }
+            } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        try {
+            $conn->beginTransaction();
+            $stmt->execute($data);
+            $conn->commit();
+        }catch (Exception $e){
+            $conn->rollback();
+            throw $e;
+        }
+        $conn = null;
+    }
+
     function insertmultiple($data){
         $servername = "localhost";
         $username = "user";

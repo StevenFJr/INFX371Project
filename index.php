@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <?php
+    session_start();
     require "functions.php";
     ?>
 </head>
@@ -19,24 +20,20 @@
 	gettopthousand(); // Sets topthousand entries in the db
     if (isset($_POST['submit'])){
         try{(query("name",$_POST['userText']));
-            setcookie("type", "name",['samesite' => 'None']);
-            setcookie("userText", $_POST['userText'],['samesite' => 'Lax']);
-		echo" 
-		<script 
-		type=\"text/javascript\">
-		window.location.href = 'calc.php';
-		</script>";
+            $_SESSION["type"] = "name";
+            $_SESSION["userText"] = $_POST['userText'];
+            savequery("name",$_POST['userText']);
+            header("Location: calc.php");
+
         }catch(Exception $e){
             try{(query("symbol",$_POST['userText']));
-			setcookie("type", "name",['samesite' => 'Lax']);
-			setcookie("userText", $_POST['userText'],['samesite' => 'Lax']);
-		
-            echo" 
-			<script 
-			type=\"text/javascript\">
-			window.location.href = 'calc.php';
-			</script>";
+                $_SESSION["type"]="symbol";
+                $_SESSION["userText"] = $_POST['userText'];
+                savequery("symbol",$_POST['userText']);
+                header("Location: calc.php");
+
             }catch(Exception $e){
+                savequery("failedsearch",$_POST['userText']);
                 echo($_POST['userText'] . " not found or not within top 1000 coins.");
             }
         }
