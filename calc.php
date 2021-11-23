@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcualtor</title>
-    <!-- <script src="functions.js"></script> -->
+    <title>Calculator</title>
     <?php
     session_start();
     require "functions.php";
@@ -13,7 +12,11 @@
     ?>
 </head>
 <body>
-    <?php $coin = query($_COOKIE["type"],$_COOKIE["userText"]);?>
+    <?php
+    if(isset($_SESSION["type"])){
+    $coin = query($_SESSION["type"],$_SESSION["userText"]);
+    }else{
+    echo("Test failed");}?>
     <form action="#" method="POST">
         <table id="resultdisplay">
             <tr>

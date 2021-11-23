@@ -319,11 +319,11 @@
             }
         }else if($topC1<0 && $C1<0){ //both negative test
             if($C1 < $topC1){
-                $C1Res = (0 * $C1W) * 100;
+                $C1Res = (1 * $C1W) * 100;
                 echo ("C1: ".$C1Res);
                 echo nl2br("\n");
             }else{
-                $C1Res = (($C1/$topC1) * $C1W) * 100;
+                $C1Res = (($topC1/$C1) * $C1W) * 100;
                 echo ("C1: ".$C1Res);
                 echo nl2br("\n");
         
@@ -338,7 +338,7 @@
             echo nl2br("\n");
         }
 
-        if($topC24>0 && $C24>0){
+        if($topC24>0 && $C24>0){ //both pos
             if($C24 > $topC24){
                 $C24Res = (1 * $C24W) * 100;
                 echo ("C24: ".$C24Res);
@@ -348,27 +348,27 @@
                 echo ("C24: ".$C24Res);
                 echo nl2br("\n");
             }
-        }else if($topC24<0 && $C24<0){
-            if($C24 < $topC24){
-                $C24Res = (0 * $C24W) * 100;
+        }else if($topC24<0 && $C24<0){ //both neg
+            if($C24 > $topC24){
+                $C24Res = (1 * $C24W) * 100;
                 echo ("C24: ".$C24Res);
                 echo nl2br("\n");
             }else{
-                $C24Res = (($C24/$topC24) * $C24W) * 100;
+                $C24Res = (($topC24/$C24) * $C24W) * 100;
                 echo ("C24: ".$C24Res);
                 echo nl2br("\n");
             }
-        }else if($topC24<0){
+        }else if($topC24<0){ //top neg comp pos
             $C24Res = (1 * $C24W) * 100;
             echo ("C24: ".$C24Res);
             echo nl2br("\n");
-        } else{
+        } else{ //top pos comp neg
             $C24Res = 0;
             echo ("C24: ".$C24Res);
             echo nl2br("\n");
         }
 
-        if($topC7>0 && $C7>0){
+        if($topC7>0 && $C7>0){ //both pos
             if($C7 > $topC7){
                 $C7Res = (1 * $C7W) * 100;
                 echo ("C7: ".$C7Res);
@@ -378,21 +378,21 @@
                 echo ("C7: ".$C7Res);
                 echo nl2br("\n");
             }
-        }else if($topC7<0 && $C7<0){
+        }else if($topC7<0 && $C7<0){ //both neg
             if($C7 < $topC7){
-                $C7Res = (0 * $C7W) * 100;
+                $C7Res = (1 * $C7W) * 100;
                 echo ("C7: ".$C7Res);
                 echo nl2br("\n");
             }else{
-                $C7Res = (($C7/$topC7) * $C7W) * 100;
+                $C7Res = (($topC7/$C7) * $C7W) * 100;
                 echo ("C7: ".$C7Res);
                 echo nl2br("\n");
             }
-        }else if($topC7<0){
+        }else if($topC7<0){ //top neg comp pos
             $C7Res = (1 * $C7W) * 100;
             echo ("C7: ".$C7Res);
             echo nl2br("\n");
-        } else{
+        } else{ //top pos comp neg
             $C7Res = 0;
             echo ("C7: ".$C7Res);
         }

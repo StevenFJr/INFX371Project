@@ -19,9 +19,8 @@
 	gettopthousand(); // Sets topthousand entries in the db
     if (isset($_POST['submit'])){
         try{(query("name",$_POST['userText']));
-        	setcookie("type", "name");
-        	setcookie("userText", $_POST['userText']);
-	    
+            setcookie("type", "name",['samesite' => 'None']);
+            setcookie("userText", $_POST['userText'],['samesite' => 'Lax']);
 		echo" 
 		<script 
 		type=\"text/javascript\">
@@ -29,16 +28,16 @@
 		</script>";
         }catch(Exception $e){
             try{(query("symbol",$_POST['userText']));
-			setcookie("type", "name");
-			setcookie("userText", $_POST['userText']);
+			setcookie("type", "name",['samesite' => 'Lax']);
+			setcookie("userText", $_POST['userText'],['samesite' => 'Lax']);
 		
-                        echo" 
+            echo" 
 			<script 
 			type=\"text/javascript\">
 			window.location.href = 'calc.php';
 			</script>";
             }catch(Exception $e){
-             		echo($_POST['userText'] . " not found or not within top 1000 coins.");
+                echo($_POST['userText'] . " not found or not within top 1000 coins.");
             }
         }
     }
