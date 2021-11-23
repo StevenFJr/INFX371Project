@@ -13,7 +13,7 @@
     ?>
 </head>
 <body>
-    <?php $coin = query($_SESSION["type"],$_SESSION["userText"]);?>
+    <?php $coin = query($_COOKIE["type"],$_COOKIE["userText"]);?>
     <form action="#" method="POST">
         <table id="resultdisplay">
             <tr>
