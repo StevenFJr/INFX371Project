@@ -7,29 +7,28 @@
     <title>Document</title>
     <?php
     require "functions.php";
-    session_start();
     ?>
 </head>
 <body>
     <form action="#" method="POST">
         <label>Enter Symbol/Name:</label>
         <input type="text" id='coininput' name='userText'></input>
-        <button type=sumbit name=submit id="Submit"> Submit</button>
+        <button type=submit name=submit id="Submit"> Submit</button>
     </form>
     <?php 
 	gettopthousand(); // Sets topthousand entries in the db
     if (isset($_POST['submit'])){
         try{(query("name",$_POST['userText']));
-            $_SESSION["type"] = "name";
-            $_SESSION["userText"] = $_POST['userText'];
+            setcookie("type", "name", time() + 1200);
+            setcookie("userText", $_POST['userText'], time() + 1200);
             header("Location: calc.php");
         }catch(Exception $e){
             try{(query("symbol",$_POST['userText']));
-                $_SESSION["type"]="symbol";
-                $_SESSION["userText"] = $_POST['userText'];
+			setcookie("type", "name", time() + 1200);
+			setcookie("userText", $_POST['userText'], time() + 1200);
                 header("Location: calc.php");
             }catch(Exception $e){
-                echo($_POST['userText'] . " not found or not within top 1000 coins.");
+             		echo($_POST['userText'] . " not found or not within top 1000 coins.");
             }
         }
     }
