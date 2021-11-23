@@ -351,7 +351,7 @@
                 echo nl2br("\n");
             }
         }else if($topC1<0 && $C1<0){ //both negative test
-            if($C1 < $topC1){
+            if($C1 > $topC1){
                 $C1Res = (1 * $C1W) * 100;
                 echo ("C1: ".$C1Res);
                 echo nl2br("\n");
@@ -412,7 +412,7 @@
                 echo nl2br("\n");
             }
         }else if($topC7<0 && $C7<0){ //both neg
-            if($C7 < $topC7){
+            if($C7 > $topC7){
                 $C7Res = (1 * $C7W) * 100;
                 echo ("C7: ".$C7Res);
                 echo nl2br("\n");
