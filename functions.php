@@ -34,7 +34,7 @@
             $parameters = [
             'convert' => 'USD',
             'start' => 1,
-            'limit' => 200
+            'limit' => 201
             ];
             
             $headers = [
@@ -61,7 +61,7 @@
 
             cleardb();
 
-            for($i=0;$i<=199;$i++){
+            for($i=0;$i<=200;$i++){
                 $data = [$array["data"][$i]["id"], $array["data"][$i]["symbol"], $array["data"][$i]["name"], $array["data"][$i]["quote"]["USD"]["volume_24h"], $array["data"][$i]["quote"]["USD"]["percent_change_1h"], $array["data"][$i]["quote"]["USD"]["percent_change_24h"], $array["data"][$i]["quote"]["USD"]["percent_change_7d"], $array["data"][$i]["quote"]["USD"]["market_cap"], $array["data"][$i]["quote"]["USD"]["price"],$timestamp];
                 
                 insertmultiple($data);
@@ -124,7 +124,8 @@
         $username = "user";
         $password = "12345";
         $dbname = "bigleaf";
-        
+		
+        $search = trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $search)));
         try{
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
