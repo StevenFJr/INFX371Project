@@ -426,7 +426,24 @@
                 echo ("C7: ".$C7Res);
             }
         
-        $score=$C1Res+$C24Res+$C7Res;
+            //These if-else statements determine the score of market cap 
+            if($Mrk>=10000000000){
+                $MrkRes= (1*$MrkW)*100;
+            }else if($Mrk<10000000000 && $Mrk >= 1000000000){
+                $MrkRes= (.80*$MrkW)*100;
+            }else if($Mrk<1000000000 && $Mrk >= 500000000){
+                $MrkRes= (.40*$MrkW)*100;
+            }else{
+                $MrkRes= (0*$MrkW)*100;
+            }
+
+            //This code determines score of volume24
+
+
+
+
+
+        $score=$C1Res+$C24Res+$C7Res+$MrkRes;
         // echo($MrkW*100+$VolW*100+$C1W*100+$C24W*100+$C7W*100);
     
         if($score>=90){
