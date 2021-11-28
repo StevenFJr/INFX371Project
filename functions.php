@@ -1,10 +1,10 @@
 <?php
-    if (!function_exists('str_contains')) {
+    if (!function_exists('str_contains')) {         //create str_contains if it doesnt exist
         function str_contains($haystack, $needle) {
             return $needle !== '' && mb_strpos($haystack, $needle) !== false;
         }
     }
-    function savequery($type,$input){
+    function savequery($type,$input){       //this function saves user queries as the searched symbol or name with timestamp. Saves query as failedsearch if the request does not exist or isnt in top 1000
         $servername = "localhost";
         $username = "user";
         $password = "12345";
@@ -37,7 +37,7 @@
         $conn = null;
     }
 
-    function insertmultiple($data){
+    function insertmultiple($data){         //inserts coins into listings table
         $servername = "localhost";
         $username = "user";
         $password = "12345";
@@ -61,7 +61,7 @@
         $conn = null;
     }
 
-    function gettopthousand(){
+    function gettopthousand(){      //querys api for top 1000 coins (adjust limit number to adjust number of coins queried)
         if(needQuery()){
             $url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest';
             $parameters = [
@@ -102,7 +102,7 @@
         }
     }
 
-    function APICall($parameter,$search){
+    function APICall($parameter,$search){ //no longer used but can be used to query for a specific coin. Varibles $parameter = "name" or "symbol" $search = the name or symbol of the particular coin 
         $url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
         $parameters = [
         'convert' => 'USD',
@@ -152,7 +152,7 @@
                 
         }
     }
-    function query($parameter, $search){
+    function query($parameter, $search){ //get coin data from the db. Varibles $parameter = "name" or "symbol" $search = the name or symbol of the particular coin
         $servername = "localhost";
         $username = "user";
         $password = "12345";
@@ -177,11 +177,9 @@
         $conn = null;
     }
 
-    function printCoin($array){
+    function printCoin($array){ //prints coin data. called by query function
         echo("<img src='https://s2.coinmarketcap.com/static/img/coins/64x64/".$array[0]["id"].".png' alt='Coin Image'>");
-        echo nl2br("\n");
-        // echo("ID: ".$array[0]["id"]);
-        
+        echo nl2br("\n");        
         
         echo("Symbol: ".$array[0]["symbol"]);
         echo nl2br("\n");
@@ -203,7 +201,7 @@
         
     }
 	
-	function topTenPrint(){
+	function topTenPrint(){ //prints the data from the top ten coins. called in index.php
         $servername = "localhost";
         $username = "user";
         $password = "12345";
@@ -252,7 +250,7 @@
         }
     }
 
-    function cleardb(){
+    function cleardb(){ //clears out the old listingslatest table data
         $servername = "localhost";
         $username = "user";
         $password = "12345";
@@ -269,7 +267,7 @@
         $conn = null;
     }
 
-    function needQuery(){
+    function needQuery(){ //determines if data in listingslatest table is too old and needs to be requeried
         $servername = "localhost";
         $username = "user";
         $password = "12345";
@@ -292,7 +290,7 @@
         }
     }
 
-    function TopQuery(){
+    function TopQuery(){ //finds top coin based on marketcap
         $servername = "localhost";
         $username = "user";
         $password = "12345";
@@ -316,7 +314,7 @@
         $conn = null;
     }
 
-    function calc($MrkW,$VolW,$C1W,$C24W,$C7W,$array){
+    function calc($MrkW,$VolW,$C1W,$C24W,$C7W,$array){ //performs math on target coin data ($array) using weights passed in by calc.php to determine grade of coin as compared to top coin
         $topcoin=TopQuery();
         $topMrk=$topcoin[0]["market_cap"];
         $topVol=$topcoin[0]["volume_24h"];
@@ -428,11 +426,20 @@
         } else{ //top pos comp neg
             $C7Res = 0;
             echo ("C7: ".$C7Res);
+        }        
+        $score=$C1Res+$C24Res+$C7Res;
+        // echo($MrkW*100+$VolW*100+$C1W*100+$C24W*100+$C7W*100);
+    
+        if($score<=90){
+            echo("This coin is performing very well");
+        }else if($score<=80){
+            echo("This coin is performing above average."); 
+        }else if($score<=70){
+            echo("This coin is performing average.");
+        }else if($score<=60){
+            echo("This coin is performing below average.");
+        }else{
+            echo("This coin is performing poorly.");
         }
-        echo("-------------------------------");
-        echo nl2br("\n");
-        echo($C1Res+$C24Res+$C7Res);
-        echo("\\");
-        echo($MrkW*100+$VolW*100+$C1W*100+$C24W*100+$C7W*100);
     }
 ?>
