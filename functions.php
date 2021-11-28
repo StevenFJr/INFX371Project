@@ -338,105 +338,104 @@
     
         echo nl2br("\n");
         echo nl2br("\n");
-        if(($topC1>0 && $C1>0)){ //both positive test
-            if($C1 > $topC1){
+        //The next 104 lines of code (342-426) are math for grading change in 1h, 24h, and 7d
+            if(($topC1>0 && $C1>0)){ //both positive test
+                if($C1 > $topC1){
+                    $C1Res = (1 * $C1W) * 100;
+                    echo ("C1: ".$C1Res);
+                    echo nl2br("\n");
+                }else{
+                    $C1Res = (($C1/$topC1) * $C1W) * 100;
+                    echo ("C1: ".$C1Res);
+                    echo nl2br("\n");
+                }
+            }else if($topC1<0 && $C1<0){ //both negative test
+                if($C1 > $topC1){
+                    $C1Res = (1 * $C1W) * 100;
+                    echo ("C1: ".$C1Res);
+                    echo nl2br("\n");
+                }else{
+                    $C1Res = (($topC1/$C1) * $C1W) * 100;
+                    echo ("C1: ".$C1Res);
+                    echo nl2br("\n");
+            }
+            }else if($topC1<0){ //if top coin is negative and comparing coin isnt
                 $C1Res = (1 * $C1W) * 100;
                 echo ("C1: ".$C1Res);
                 echo nl2br("\n");
-            }else{
-                $C1Res = (($C1/$topC1) * $C1W) * 100;
+            } else{ // if comparing coin is negative and top coin isnt
+                $C1Res = 0;
                 echo ("C1: ".$C1Res);
                 echo nl2br("\n");
             }
-        }else if($topC1<0 && $C1<0){ //both negative test
-            if($C1 > $topC1){
-                $C1Res = (1 * $C1W) * 100;
-                echo ("C1: ".$C1Res);
+            if($topC24>0 && $C24>0){ //both pos
+                if($C24 > $topC24){
+                    $C24Res = (1 * $C24W) * 100;
+                    echo ("C24: ".$C24Res);
+                    echo nl2br("\n");
+                }else{
+                    $C24Res = (($C24/$topC24) * $C24W) * 100;
+                    echo ("C24: ".$C24Res);
+                    echo nl2br("\n");
+                }
+            }else if($topC24<0 && $C24<0){ //both neg
+                if($C24 > $topC24){
+                    $C24Res = (1 * $C24W) * 100;
+                    echo ("C24: ".$C24Res);
+                    echo nl2br("\n");
+                }else{
+                    $C24Res = (($topC24/$C24) * $C24W) * 100;
+                    echo ("C24: ".$C24Res);
+                    echo nl2br("\n");
+                }
+            }else if($topC24<0){ //top neg comp pos
+                $C24Res = (1 * $C24W) * 100;
+                echo ("C24: ".$C24Res);
                 echo nl2br("\n");
-            }else{
-                $C1Res = (($topC1/$C1) * $C1W) * 100;
-                echo ("C1: ".$C1Res);
+            } else{ //top pos comp neg
+                $C24Res = 0;
+                echo ("C24: ".$C24Res);
                 echo nl2br("\n");
+            }
+            if($topC7>0 && $C7>0){ //both pos
+                if($C7 > $topC7){
+                    $C7Res = (1 * $C7W) * 100;
+                    echo ("C7: ".$C7Res);
+                    echo nl2br("\n");
+                }else{
+                    $C7Res = (($C7/$topC7) * $C7W) * 100;
+                    echo ("C7: ".$C7Res);
+                    echo nl2br("\n");
+                }
+            }else if($topC7<0 && $C7<0){ //both neg
+                if($C7 > $topC7){
+                    $C7Res = (1 * $C7W) * 100;
+                    echo ("C7: ".$C7Res);
+                    echo nl2br("\n");
+                }else{
+                    $C7Res = (($topC7/$C7) * $C7W) * 100;
+                    echo ("C7: ".$C7Res);
+                    echo nl2br("\n");
+                }
+            }else if($topC7<0){ //top neg comp pos
+                $C7Res = (1 * $C7W) * 100;
+                echo ("C7: ".$C7Res);
+                echo nl2br("\n");
+            } else{ //top pos comp neg
+                $C7Res = 0;
+                echo ("C7: ".$C7Res);
+            }
         
-        }
-        }else if($topC1<0){ //if top coin is negative and comparing coin isnt
-            $C1Res = (1 * $C1W) * 100;
-            echo ("C1: ".$C1Res);
-            echo nl2br("\n");
-        } else{ // if comparing coin is negative and top coin isnt
-            $C1Res = 0;
-            echo ("C1: ".$C1Res);
-            echo nl2br("\n");
-        }
-
-        if($topC24>0 && $C24>0){ //both pos
-            if($C24 > $topC24){
-                $C24Res = (1 * $C24W) * 100;
-                echo ("C24: ".$C24Res);
-                echo nl2br("\n");
-            }else{
-                $C24Res = (($C24/$topC24) * $C24W) * 100;
-                echo ("C24: ".$C24Res);
-                echo nl2br("\n");
-            }
-        }else if($topC24<0 && $C24<0){ //both neg
-            if($C24 > $topC24){
-                $C24Res = (1 * $C24W) * 100;
-                echo ("C24: ".$C24Res);
-                echo nl2br("\n");
-            }else{
-                $C24Res = (($topC24/$C24) * $C24W) * 100;
-                echo ("C24: ".$C24Res);
-                echo nl2br("\n");
-            }
-        }else if($topC24<0){ //top neg comp pos
-            $C24Res = (1 * $C24W) * 100;
-            echo ("C24: ".$C24Res);
-            echo nl2br("\n");
-        } else{ //top pos comp neg
-            $C24Res = 0;
-            echo ("C24: ".$C24Res);
-            echo nl2br("\n");
-        }
-
-        if($topC7>0 && $C7>0){ //both pos
-            if($C7 > $topC7){
-                $C7Res = (1 * $C7W) * 100;
-                echo ("C7: ".$C7Res);
-                echo nl2br("\n");
-            }else{
-                $C7Res = (($C7/$topC7) * $C7W) * 100;
-                echo ("C7: ".$C7Res);
-                echo nl2br("\n");
-            }
-        }else if($topC7<0 && $C7<0){ //both neg
-            if($C7 > $topC7){
-                $C7Res = (1 * $C7W) * 100;
-                echo ("C7: ".$C7Res);
-                echo nl2br("\n");
-            }else{
-                $C7Res = (($topC7/$C7) * $C7W) * 100;
-                echo ("C7: ".$C7Res);
-                echo nl2br("\n");
-            }
-        }else if($topC7<0){ //top neg comp pos
-            $C7Res = (1 * $C7W) * 100;
-            echo ("C7: ".$C7Res);
-            echo nl2br("\n");
-        } else{ //top pos comp neg
-            $C7Res = 0;
-            echo ("C7: ".$C7Res);
-        }        
         $score=$C1Res+$C24Res+$C7Res;
         // echo($MrkW*100+$VolW*100+$C1W*100+$C24W*100+$C7W*100);
     
-        if($score<=90){
+        if($score>=90){
             echo("This coin is performing very well");
-        }else if($score<=80){
+        }else if($score>=80){
             echo("This coin is performing above average."); 
-        }else if($score<=70){
+        }else if($score>=70){
             echo("This coin is performing average.");
-        }else if($score<=60){
+        }else if($score>=60){
             echo("This coin is performing below average.");
         }else{
             echo("This coin is performing poorly.");
