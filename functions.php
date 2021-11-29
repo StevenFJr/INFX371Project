@@ -4,39 +4,7 @@
             return $needle !== '' && mb_strpos($haystack, $needle) !== false;
         }
     }
-    function savequery($type,$input){       //this function saves user queries as the searched symbol or name with timestamp. Saves query as failedsearch if the request does not exist or isnt in top 1000
-        $servername = "localhost";
-        $username = "user";
-        $password = "12345";
-        $dbname = "bigleaf";
-        date_default_timezone_set("EST");
-        $timestamp=date_timestamp_get(date_create());
-        $data=array($timestamp,$input);
-
-        try {
-            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            if($type == "symbol"){
-                $stmt = $conn->prepare("INSERT INTO searches (timestamp, symbol) VALUES (?,?)");
-            } else if($type == "name"){
-                $stmt = $conn->prepare("INSERT INTO searches (timestamp, name) VALUES (?,?)");
-            }else{
-                $stmt = $conn->prepare("INSERT INTO searches (timestamp, failedsearch) VALUES (?,?)");
-            }
-            } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-        try {
-            $conn->beginTransaction();
-            $stmt->execute($data);
-            $conn->commit();
-        }catch (Exception $e){
-            $conn->rollback();
-            throw $e;
-        }
-        $conn = null;
-    }
-
+	
     function insertmultiple($data){         //inserts coins into listings table
         $servername = "localhost";
         $username = "user";
@@ -152,7 +120,8 @@
                 
         }
     }
-    function query($parameter, $search){ //get coin data from the db. Varibles $parameter = "name" or "symbol" $search = the name or symbol of the particular coin
+    
+	function query($parameter, $search){ //get coin data from the db. Varibles $parameter = "name" or "symbol" $search = the name or symbol of the particular coin
         $servername = "localhost";
         $username = "user";
         $password = "12345";
@@ -161,15 +130,16 @@
         try{
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $stmt = $conn->prepare("SELECT * FROM listingslatest WHERE $parameter = '$search' ORDER BY market_cap DESC");
+            $stmt = $conn->prepare("SELECT * FROM listingslatest WHERE $parameter = '$search' ORDER BY market_cap DESC LIMIT 1");
             $stmt->execute();
         
             // set the resulting array to associative
-            $data = $stmt->fetchAll();
+            $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if(empty($data)){
                 throw new Exception();
             }
-            printCoin($data);
+			printCoin($data[0]);
+            
             return($data);
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -177,25 +147,59 @@
         $conn = null;
     }
 
-    function printCoin($array){ //prints coin data. called by query function
-        echo("<img src='https://s2.coinmarketcap.com/static/img/coins/64x64/".$array[0]["id"].".png' alt='Coin Image'>");
+    function savequery($type,$input){   //this function saves user queries as the searched id, symbol, & name with timestamp.
+		$servername = "localhost";
+        $username = "user";
+        $password = "12345";
+        $dbname = "bigleaf";
+        date_default_timezone_set("EST");
+        $timestamp=date_timestamp_get(date_create());
+		
+		$data = query($type,$input);
+		$id=$data[0]['id'];
+		$name=$data[0]['name'];
+		$symbol =$data[0]['symbol'];
+		
+        
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $conn->prepare("INSERT INTO searches VALUES (DEFAULT, '$id', '$symbol', '$name', '$timestamp')");
+            } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        try {
+            $conn->beginTransaction();
+            $stmt->execute();
+            $conn->commit();
+        }catch (Exception $e){
+            $conn->rollback();
+            throw $e;
+        }
+        $conn = null;
+		
+	}
+		
+	
+	function printCoin($array){ //prints coin data. called by query function
+        echo("<img src='https://s2.coinmarketcap.com/static/img/coins/64x64/".$array["id"].".png' alt='Coin Image'>");
         echo nl2br("\n");        
         
-        echo("Symbol: ".$array[0]["symbol"]);
+        echo("Symbol: ".$array["symbol"]);
         echo nl2br("\n");
-        echo("Name: ".$array[0]["name"]);
+        echo("Name: ".$array["name"]);
         echo nl2br("\n");
-        echo("Price: ".$array[0]["price"]);
+        echo("Price: ".$array["price"]);
         echo nl2br("\n");
-        echo("Percent Change 1h: ".$array[0]["percent_change_1h"]);
+        echo("Percent Change 1h: ".$array["percent_change_1h"]);
         echo nl2br("\n");
-        echo("Percent Change 24h: ".$array[0]["percent_change_24h"]);
+        echo("Percent Change 24h: ".$array["percent_change_24h"]);
         echo nl2br("\n");
-        echo("Percent Change 7d: ".$array[0]["percent_change_7d"]);
+        echo("Percent Change 7d: ".$array["percent_change_7d"]);
         echo nl2br("\n");
-        echo("Volume 24h: ".$array[0]["volume_24h"]);
+        echo("Volume 24h: ".$array["volume_24h"]);
         echo nl2br("\n");
-        echo("Market Cap: ".$array[0]["market_cap"]);
+        echo("Market Cap: ".$array["market_cap"]);
         echo nl2br("\n");
         
         
@@ -342,88 +346,88 @@
             if(($topC1>0 && $C1>0)){ //both positive test
                 if($C1 > $topC1){
                     $C1Res = (1 * $C1W) * 100;
-                    echo ("C1: ".$C1Res);
-                    echo nl2br("\n");
+                    //echo ("C1: ".$C1Res);
+                    //echo nl2br("\n");
                 }else{
                     $C1Res = (($C1/$topC1) * $C1W) * 100;
-                    echo ("C1: ".$C1Res);
-                    echo nl2br("\n");
+                    //echo ("C1: ".$C1Res);
+                    //echo nl2br("\n");
                 }
             }else if($topC1<0 && $C1<0){ //both negative test
                 if($C1 > $topC1){
                     $C1Res = (1 * $C1W) * 100;
-                    echo ("C1: ".$C1Res);
-                    echo nl2br("\n");
+                    //echo ("C1: ".$C1Res);
+                    //echo nl2br("\n");
                 }else{
                     $C1Res = (($topC1/$C1) * $C1W) * 100;
-                    echo ("C1: ".$C1Res);
-                    echo nl2br("\n");
+                    //echo ("C1: ".$C1Res);
+                    //echo nl2br("\n");
             }
             }else if($topC1<0){ //if top coin is negative and comparing coin isnt
                 $C1Res = (1 * $C1W) * 100;
-                echo ("C1: ".$C1Res);
-                echo nl2br("\n");
+                //echo ("C1: ".$C1Res);
+                //echo nl2br("\n");
             } else{ // if comparing coin is negative and top coin isnt
                 $C1Res = 0;
-                echo ("C1: ".$C1Res);
-                echo nl2br("\n");
+                //echo ("C1: ".$C1Res);
+                //echo nl2br("\n");
             }
             if($topC24>0 && $C24>0){ //both pos
                 if($C24 > $topC24){
                     $C24Res = (1 * $C24W) * 100;
-                    echo ("C24: ".$C24Res);
-                    echo nl2br("\n");
+                    //echo ("C24: ".$C24Res);
+                    //echo nl2br("\n");
                 }else{
                     $C24Res = (($C24/$topC24) * $C24W) * 100;
-                    echo ("C24: ".$C24Res);
-                    echo nl2br("\n");
+                    //echo ("C24: ".$C24Res);
+                    //echo nl2br("\n");
                 }
             }else if($topC24<0 && $C24<0){ //both neg
                 if($C24 > $topC24){
                     $C24Res = (1 * $C24W) * 100;
-                    echo ("C24: ".$C24Res);
-                    echo nl2br("\n");
+                    //echo ("C24: ".$C24Res);
+                    //echo nl2br("\n");
                 }else{
                     $C24Res = (($topC24/$C24) * $C24W) * 100;
-                    echo ("C24: ".$C24Res);
-                    echo nl2br("\n");
+                    //echo ("C24: ".$C24Res);
+                    //echo nl2br("\n");
                 }
             }else if($topC24<0){ //top neg comp pos
                 $C24Res = (1 * $C24W) * 100;
-                echo ("C24: ".$C24Res);
-                echo nl2br("\n");
+                //echo ("C24: ".$C24Res);
+                //echo nl2br("\n");
             } else{ //top pos comp neg
                 $C24Res = 0;
-                echo ("C24: ".$C24Res);
-                echo nl2br("\n");
+                //echo ("C24: ".$C24Res);
+                //echo nl2br("\n");
             }
             if($topC7>0 && $C7>0){ //both pos
                 if($C7 > $topC7){
                     $C7Res = (1 * $C7W) * 100;
-                    echo ("C7: ".$C7Res);
-                    echo nl2br("\n");
+                    //echo ("C7: ".$C7Res);
+                    //echo nl2br("\n");
                 }else{
                     $C7Res = (($C7/$topC7) * $C7W) * 100;
-                    echo ("C7: ".$C7Res);
-                    echo nl2br("\n");
+                    //echo ("C7: ".$C7Res);
+                    //echo nl2br("\n");
                 }
             }else if($topC7<0 && $C7<0){ //both neg
                 if($C7 > $topC7){
                     $C7Res = (1 * $C7W) * 100;
-                    echo ("C7: ".$C7Res);
-                    echo nl2br("\n");
+                    //echo ("C7: ".$C7Res);
+                    //echo nl2br("\n");
                 }else{
                     $C7Res = (($topC7/$C7) * $C7W) * 100;
-                    echo ("C7: ".$C7Res);
-                    echo nl2br("\n");
+                    //echo ("C7: ".$C7Res);
+                    //echo nl2br("\n");
                 }
             }else if($topC7<0){ //top neg comp pos
                 $C7Res = (1 * $C7W) * 100;
-                echo ("C7: ".$C7Res);
-                echo nl2br("\n");
+                //echo ("C7: ".$C7Res);
+                //echo nl2br("\n");
             } else{ //top pos comp neg
                 $C7Res = 0;
-                echo ("C7: ".$C7Res);
+                //echo ("C7: ".$C7Res);
             }
         
             //These if-else statements determine the score of market cap 
@@ -438,14 +442,19 @@
             }
 
             //This code determines score of volume24
+			if($Vol>=($Mrk*.40) && $C24>0){
+				$VolRes=(1*$VolW) *100;
+			}else if($Vol>=($Mrk*.10) && $C24>0){
+				$VolRes=(.70*$VolW)*100;
+			}else if($Vol>=(0) && $C24>0){
+				$VolRes=(.40*$VolW)*100;
+			}else{
+				$VolRes=0;
+			}
 
 
-
-
-
-        $score=$C1Res+$C24Res+$C7Res+$MrkRes;
+        $score=$C1Res+$C24Res+$C7Res+$MrkRes+$VolRes;
         // echo($MrkW*100+$VolW*100+$C1W*100+$C24W*100+$C7W*100);
-    
         if($score>=90){
             echo("This coin is performing very well");
         }else if($score>=80){
