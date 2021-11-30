@@ -70,7 +70,8 @@
         }
     }
 
-    function APICall($parameter,$search){ //no longer used but can be used to query for a specific coin. Varibles $parameter = "name" or "symbol" $search = the name or symbol of the particular coin 
+    // @deprecated
+    function APICall($parameter,$search){   //can be used to query for a specific coin. Varibles $parameter = "name" or "symbol" $search = the name or symbol of the particular coin 
         $url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
         $parameters = [
         'convert' => 'USD',
@@ -276,7 +277,7 @@
         $username = "user";
         $password = "12345";
         $dbname = "bigleaf";
-        
+        $refreshSeconds=112; //This number represents how many seconds pass before the db needs to query again and use more calls. This number should use close to the 120,000 calls alloted per month
         try{
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -287,7 +288,7 @@
             echo "Error: " . $e->getMessage();
         }
         $conn = null;
-        if(date_timestamp_get(date_create()) - $data[0] >=30){
+        if(date_timestamp_get(date_create()) - $data[0] >=$refreshSeconds){  
             return true;
         }else{
             return false;
