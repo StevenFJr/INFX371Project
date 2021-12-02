@@ -11,3 +11,12 @@ CREATE TABLE `listingslatest` (
   `timestamp` bigint,
   PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `searches` (
+  `numSearch` bigint,
+  `id` int,
+  `symbol` text,
+  `name` text,
+  `timestamp` bigint,
+  PRIMARY KEY (`numSearch`)
+);
