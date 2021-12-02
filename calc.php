@@ -67,4 +67,7 @@
     </table>	
     
 </body>
+<footer>
+    <p>DISCLAIMER:Cryptocurrencies are inherently high-risk investments. Big Leaf is not liable for monetary gains or losses that result from decisions influenced by this calculator. Invest at your own risk</p>
+</footer>
 </html>
